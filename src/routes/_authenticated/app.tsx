@@ -6,13 +6,13 @@ export const Route = createFileRoute("/_authenticated/app")({
   component: AppLayout,
 });
 
-const TABS = [
+const TABS: Array<{ to: "/app" | "/app/materials" | "/app/tests" | "/app/results" | "/app/profile"; label: string; icon: React.ComponentType<{ className?: string }>; exact?: boolean }> = [
   { to: "/app", label: "Home", icon: Home, exact: true },
   { to: "/app/materials", label: "Materials", icon: BookOpen },
   { to: "/app/tests", label: "Tests", icon: ClipboardList },
   { to: "/app/results", label: "Results", icon: BarChart3 },
   { to: "/app/profile", label: "Profile", icon: User },
-] as const;
+];
 
 function AppLayout() {
   const { data, isLoading } = useSession();
