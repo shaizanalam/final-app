@@ -9,22 +9,44 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as PendingRouteImport } from './routes/pending'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedTeacherRouteImport } from './routes/_authenticated/teacher'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/app'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedTeacherIndexRouteImport } from './routes/_authenticated/teacher.index'
 import { Route as AuthenticatedAppIndexRouteImport } from './routes/_authenticated/app.index'
+import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
+import { Route as AuthenticatedTeacherTestsRouteImport } from './routes/_authenticated/teacher.tests'
+import { Route as AuthenticatedTeacherMaterialsRouteImport } from './routes/_authenticated/teacher.materials'
+import { Route as AuthenticatedTeacherAttendanceRouteImport } from './routes/_authenticated/teacher.attendance'
 import { Route as AuthenticatedAppTestsRouteImport } from './routes/_authenticated/app.tests'
 import { Route as AuthenticatedAppResultsRouteImport } from './routes/_authenticated/app.results'
 import { Route as AuthenticatedAppProfileRouteImport } from './routes/_authenticated/app.profile'
 import { Route as AuthenticatedAppMaterialsRouteImport } from './routes/_authenticated/app.materials'
+import { Route as AuthenticatedAdminTeachersRouteImport } from './routes/_authenticated/admin.teachers'
+import { Route as AuthenticatedAdminSubjectsRouteImport } from './routes/_authenticated/admin.subjects'
+import { Route as AuthenticatedAdminNotificationsRouteImport } from './routes/_authenticated/admin.notifications'
+import { Route as AuthenticatedTeacherTestsTestIdRouteImport } from './routes/_authenticated/teacher.tests.$testId'
+import { Route as AuthenticatedAppTestsTestIdRouteImport } from './routes/_authenticated/app.tests.$testId'
 
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PendingRoute = PendingRouteImport.update({
   id: '/pending',
   path: '/pending',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -56,11 +78,40 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedTeacherIndexRoute =
+  AuthenticatedTeacherIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedTeacherRoute,
+  } as any)
 const AuthenticatedAppIndexRoute = AuthenticatedAppIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AuthenticatedAppRoute,
 } as any)
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
+const AuthenticatedTeacherTestsRoute =
+  AuthenticatedTeacherTestsRouteImport.update({
+    id: '/tests',
+    path: '/tests',
+    getParentRoute: () => AuthenticatedTeacherRoute,
+  } as any)
+const AuthenticatedTeacherMaterialsRoute =
+  AuthenticatedTeacherMaterialsRouteImport.update({
+    id: '/materials',
+    path: '/materials',
+    getParentRoute: () => AuthenticatedTeacherRoute,
+  } as any)
+const AuthenticatedTeacherAttendanceRoute =
+  AuthenticatedTeacherAttendanceRouteImport.update({
+    id: '/attendance',
+    path: '/attendance',
+    getParentRoute: () => AuthenticatedTeacherRoute,
+  } as any)
 const AuthenticatedAppTestsRoute = AuthenticatedAppTestsRouteImport.update({
   id: '/tests',
   path: '/tests',
@@ -82,103 +133,217 @@ const AuthenticatedAppMaterialsRoute =
     path: '/materials',
     getParentRoute: () => AuthenticatedAppRoute,
   } as any)
+const AuthenticatedAdminTeachersRoute =
+  AuthenticatedAdminTeachersRouteImport.update({
+    id: '/teachers',
+    path: '/teachers',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminSubjectsRoute =
+  AuthenticatedAdminSubjectsRouteImport.update({
+    id: '/subjects',
+    path: '/subjects',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminNotificationsRoute =
+  AuthenticatedAdminNotificationsRouteImport.update({
+    id: '/notifications',
+    path: '/notifications',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedTeacherTestsTestIdRoute =
+  AuthenticatedTeacherTestsTestIdRouteImport.update({
+    id: '/$testId',
+    path: '/$testId',
+    getParentRoute: () => AuthenticatedTeacherTestsRoute,
+  } as any)
+const AuthenticatedAppTestsTestIdRoute =
+  AuthenticatedAppTestsTestIdRouteImport.update({
+    id: '/$testId',
+    path: '/$testId',
+    getParentRoute: () => AuthenticatedAppTestsRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/pending': typeof PendingRoute
-  '/admin': typeof AuthenticatedAdminRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/app': typeof AuthenticatedAppRouteWithChildren
-  '/teacher': typeof AuthenticatedTeacherRoute
+  '/teacher': typeof AuthenticatedTeacherRouteWithChildren
+  '/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
+  '/admin/subjects': typeof AuthenticatedAdminSubjectsRoute
+  '/admin/teachers': typeof AuthenticatedAdminTeachersRoute
   '/app/materials': typeof AuthenticatedAppMaterialsRoute
   '/app/profile': typeof AuthenticatedAppProfileRoute
   '/app/results': typeof AuthenticatedAppResultsRoute
-  '/app/tests': typeof AuthenticatedAppTestsRoute
+  '/app/tests': typeof AuthenticatedAppTestsRouteWithChildren
+  '/teacher/attendance': typeof AuthenticatedTeacherAttendanceRoute
+  '/teacher/materials': typeof AuthenticatedTeacherMaterialsRoute
+  '/teacher/tests': typeof AuthenticatedTeacherTestsRouteWithChildren
+  '/admin/': typeof AuthenticatedAdminIndexRoute
   '/app/': typeof AuthenticatedAppIndexRoute
+  '/teacher/': typeof AuthenticatedTeacherIndexRoute
+  '/app/tests/$testId': typeof AuthenticatedAppTestsTestIdRoute
+  '/teacher/tests/$testId': typeof AuthenticatedTeacherTestsTestIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/pending': typeof PendingRoute
-  '/admin': typeof AuthenticatedAdminRoute
-  '/teacher': typeof AuthenticatedTeacherRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
+  '/admin/subjects': typeof AuthenticatedAdminSubjectsRoute
+  '/admin/teachers': typeof AuthenticatedAdminTeachersRoute
   '/app/materials': typeof AuthenticatedAppMaterialsRoute
   '/app/profile': typeof AuthenticatedAppProfileRoute
   '/app/results': typeof AuthenticatedAppResultsRoute
-  '/app/tests': typeof AuthenticatedAppTestsRoute
+  '/app/tests': typeof AuthenticatedAppTestsRouteWithChildren
+  '/teacher/attendance': typeof AuthenticatedTeacherAttendanceRoute
+  '/teacher/materials': typeof AuthenticatedTeacherMaterialsRoute
+  '/teacher/tests': typeof AuthenticatedTeacherTestsRouteWithChildren
+  '/admin': typeof AuthenticatedAdminIndexRoute
   '/app': typeof AuthenticatedAppIndexRoute
+  '/teacher': typeof AuthenticatedTeacherIndexRoute
+  '/app/tests/$testId': typeof AuthenticatedAppTestsTestIdRoute
+  '/teacher/tests/$testId': typeof AuthenticatedTeacherTestsTestIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/pending': typeof PendingRoute
-  '/_authenticated/admin': typeof AuthenticatedAdminRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/_authenticated/app': typeof AuthenticatedAppRouteWithChildren
-  '/_authenticated/teacher': typeof AuthenticatedTeacherRoute
+  '/_authenticated/teacher': typeof AuthenticatedTeacherRouteWithChildren
+  '/_authenticated/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
+  '/_authenticated/admin/subjects': typeof AuthenticatedAdminSubjectsRoute
+  '/_authenticated/admin/teachers': typeof AuthenticatedAdminTeachersRoute
   '/_authenticated/app/materials': typeof AuthenticatedAppMaterialsRoute
   '/_authenticated/app/profile': typeof AuthenticatedAppProfileRoute
   '/_authenticated/app/results': typeof AuthenticatedAppResultsRoute
-  '/_authenticated/app/tests': typeof AuthenticatedAppTestsRoute
+  '/_authenticated/app/tests': typeof AuthenticatedAppTestsRouteWithChildren
+  '/_authenticated/teacher/attendance': typeof AuthenticatedTeacherAttendanceRoute
+  '/_authenticated/teacher/materials': typeof AuthenticatedTeacherMaterialsRoute
+  '/_authenticated/teacher/tests': typeof AuthenticatedTeacherTestsRouteWithChildren
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/app/': typeof AuthenticatedAppIndexRoute
+  '/_authenticated/teacher/': typeof AuthenticatedTeacherIndexRoute
+  '/_authenticated/app/tests/$testId': typeof AuthenticatedAppTestsTestIdRoute
+  '/_authenticated/teacher/tests/$testId': typeof AuthenticatedTeacherTestsTestIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/auth'
+    | '/forgot-password'
     | '/pending'
+    | '/reset-password'
     | '/admin'
     | '/app'
     | '/teacher'
+    | '/admin/notifications'
+    | '/admin/subjects'
+    | '/admin/teachers'
     | '/app/materials'
     | '/app/profile'
     | '/app/results'
     | '/app/tests'
+    | '/teacher/attendance'
+    | '/teacher/materials'
+    | '/teacher/tests'
+    | '/admin/'
     | '/app/'
+    | '/teacher/'
+    | '/app/tests/$testId'
+    | '/teacher/tests/$testId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
+    | '/forgot-password'
     | '/pending'
-    | '/admin'
-    | '/teacher'
+    | '/reset-password'
+    | '/admin/notifications'
+    | '/admin/subjects'
+    | '/admin/teachers'
     | '/app/materials'
     | '/app/profile'
     | '/app/results'
     | '/app/tests'
+    | '/teacher/attendance'
+    | '/teacher/materials'
+    | '/teacher/tests'
+    | '/admin'
     | '/app'
+    | '/teacher'
+    | '/app/tests/$testId'
+    | '/teacher/tests/$testId'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/forgot-password'
     | '/pending'
+    | '/reset-password'
     | '/_authenticated/admin'
     | '/_authenticated/app'
     | '/_authenticated/teacher'
+    | '/_authenticated/admin/notifications'
+    | '/_authenticated/admin/subjects'
+    | '/_authenticated/admin/teachers'
     | '/_authenticated/app/materials'
     | '/_authenticated/app/profile'
     | '/_authenticated/app/results'
     | '/_authenticated/app/tests'
+    | '/_authenticated/teacher/attendance'
+    | '/_authenticated/teacher/materials'
+    | '/_authenticated/teacher/tests'
+    | '/_authenticated/admin/'
     | '/_authenticated/app/'
+    | '/_authenticated/teacher/'
+    | '/_authenticated/app/tests/$testId'
+    | '/_authenticated/teacher/tests/$testId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
   PendingRoute: typeof PendingRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/pending': {
       id: '/pending'
       path: '/pending'
       fullPath: '/pending'
       preLoaderRoute: typeof PendingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -223,12 +388,47 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/teacher/': {
+      id: '/_authenticated/teacher/'
+      path: '/'
+      fullPath: '/teacher/'
+      preLoaderRoute: typeof AuthenticatedTeacherIndexRouteImport
+      parentRoute: typeof AuthenticatedTeacherRoute
+    }
     '/_authenticated/app/': {
       id: '/_authenticated/app/'
       path: '/'
       fullPath: '/app/'
       preLoaderRoute: typeof AuthenticatedAppIndexRouteImport
       parentRoute: typeof AuthenticatedAppRoute
+    }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/teacher/tests': {
+      id: '/_authenticated/teacher/tests'
+      path: '/tests'
+      fullPath: '/teacher/tests'
+      preLoaderRoute: typeof AuthenticatedTeacherTestsRouteImport
+      parentRoute: typeof AuthenticatedTeacherRoute
+    }
+    '/_authenticated/teacher/materials': {
+      id: '/_authenticated/teacher/materials'
+      path: '/materials'
+      fullPath: '/teacher/materials'
+      preLoaderRoute: typeof AuthenticatedTeacherMaterialsRouteImport
+      parentRoute: typeof AuthenticatedTeacherRoute
+    }
+    '/_authenticated/teacher/attendance': {
+      id: '/_authenticated/teacher/attendance'
+      path: '/attendance'
+      fullPath: '/teacher/attendance'
+      preLoaderRoute: typeof AuthenticatedTeacherAttendanceRouteImport
+      parentRoute: typeof AuthenticatedTeacherRoute
     }
     '/_authenticated/app/tests': {
       id: '/_authenticated/app/tests'
@@ -258,14 +458,79 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppMaterialsRouteImport
       parentRoute: typeof AuthenticatedAppRoute
     }
+    '/_authenticated/admin/teachers': {
+      id: '/_authenticated/admin/teachers'
+      path: '/teachers'
+      fullPath: '/admin/teachers'
+      preLoaderRoute: typeof AuthenticatedAdminTeachersRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/subjects': {
+      id: '/_authenticated/admin/subjects'
+      path: '/subjects'
+      fullPath: '/admin/subjects'
+      preLoaderRoute: typeof AuthenticatedAdminSubjectsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/notifications': {
+      id: '/_authenticated/admin/notifications'
+      path: '/notifications'
+      fullPath: '/admin/notifications'
+      preLoaderRoute: typeof AuthenticatedAdminNotificationsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/teacher/tests/$testId': {
+      id: '/_authenticated/teacher/tests/$testId'
+      path: '/$testId'
+      fullPath: '/teacher/tests/$testId'
+      preLoaderRoute: typeof AuthenticatedTeacherTestsTestIdRouteImport
+      parentRoute: typeof AuthenticatedTeacherTestsRoute
+    }
+    '/_authenticated/app/tests/$testId': {
+      id: '/_authenticated/app/tests/$testId'
+      path: '/$testId'
+      fullPath: '/app/tests/$testId'
+      preLoaderRoute: typeof AuthenticatedAppTestsTestIdRouteImport
+      parentRoute: typeof AuthenticatedAppTestsRoute
+    }
   }
 }
+
+interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminNotificationsRoute: typeof AuthenticatedAdminNotificationsRoute
+  AuthenticatedAdminSubjectsRoute: typeof AuthenticatedAdminSubjectsRoute
+  AuthenticatedAdminTeachersRoute: typeof AuthenticatedAdminTeachersRoute
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+}
+
+const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminNotificationsRoute: AuthenticatedAdminNotificationsRoute,
+  AuthenticatedAdminSubjectsRoute: AuthenticatedAdminSubjectsRoute,
+  AuthenticatedAdminTeachersRoute: AuthenticatedAdminTeachersRoute,
+  AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+}
+
+const AuthenticatedAdminRouteWithChildren =
+  AuthenticatedAdminRoute._addFileChildren(AuthenticatedAdminRouteChildren)
+
+interface AuthenticatedAppTestsRouteChildren {
+  AuthenticatedAppTestsTestIdRoute: typeof AuthenticatedAppTestsTestIdRoute
+}
+
+const AuthenticatedAppTestsRouteChildren: AuthenticatedAppTestsRouteChildren = {
+  AuthenticatedAppTestsTestIdRoute: AuthenticatedAppTestsTestIdRoute,
+}
+
+const AuthenticatedAppTestsRouteWithChildren =
+  AuthenticatedAppTestsRoute._addFileChildren(
+    AuthenticatedAppTestsRouteChildren,
+  )
 
 interface AuthenticatedAppRouteChildren {
   AuthenticatedAppMaterialsRoute: typeof AuthenticatedAppMaterialsRoute
   AuthenticatedAppProfileRoute: typeof AuthenticatedAppProfileRoute
   AuthenticatedAppResultsRoute: typeof AuthenticatedAppResultsRoute
-  AuthenticatedAppTestsRoute: typeof AuthenticatedAppTestsRoute
+  AuthenticatedAppTestsRoute: typeof AuthenticatedAppTestsRouteWithChildren
   AuthenticatedAppIndexRoute: typeof AuthenticatedAppIndexRoute
 }
 
@@ -273,23 +538,54 @@ const AuthenticatedAppRouteChildren: AuthenticatedAppRouteChildren = {
   AuthenticatedAppMaterialsRoute: AuthenticatedAppMaterialsRoute,
   AuthenticatedAppProfileRoute: AuthenticatedAppProfileRoute,
   AuthenticatedAppResultsRoute: AuthenticatedAppResultsRoute,
-  AuthenticatedAppTestsRoute: AuthenticatedAppTestsRoute,
+  AuthenticatedAppTestsRoute: AuthenticatedAppTestsRouteWithChildren,
   AuthenticatedAppIndexRoute: AuthenticatedAppIndexRoute,
 }
 
 const AuthenticatedAppRouteWithChildren =
   AuthenticatedAppRoute._addFileChildren(AuthenticatedAppRouteChildren)
 
+interface AuthenticatedTeacherTestsRouteChildren {
+  AuthenticatedTeacherTestsTestIdRoute: typeof AuthenticatedTeacherTestsTestIdRoute
+}
+
+const AuthenticatedTeacherTestsRouteChildren: AuthenticatedTeacherTestsRouteChildren =
+  {
+    AuthenticatedTeacherTestsTestIdRoute: AuthenticatedTeacherTestsTestIdRoute,
+  }
+
+const AuthenticatedTeacherTestsRouteWithChildren =
+  AuthenticatedTeacherTestsRoute._addFileChildren(
+    AuthenticatedTeacherTestsRouteChildren,
+  )
+
+interface AuthenticatedTeacherRouteChildren {
+  AuthenticatedTeacherAttendanceRoute: typeof AuthenticatedTeacherAttendanceRoute
+  AuthenticatedTeacherMaterialsRoute: typeof AuthenticatedTeacherMaterialsRoute
+  AuthenticatedTeacherTestsRoute: typeof AuthenticatedTeacherTestsRouteWithChildren
+  AuthenticatedTeacherIndexRoute: typeof AuthenticatedTeacherIndexRoute
+}
+
+const AuthenticatedTeacherRouteChildren: AuthenticatedTeacherRouteChildren = {
+  AuthenticatedTeacherAttendanceRoute: AuthenticatedTeacherAttendanceRoute,
+  AuthenticatedTeacherMaterialsRoute: AuthenticatedTeacherMaterialsRoute,
+  AuthenticatedTeacherTestsRoute: AuthenticatedTeacherTestsRouteWithChildren,
+  AuthenticatedTeacherIndexRoute: AuthenticatedTeacherIndexRoute,
+}
+
+const AuthenticatedTeacherRouteWithChildren =
+  AuthenticatedTeacherRoute._addFileChildren(AuthenticatedTeacherRouteChildren)
+
 interface AuthenticatedRouteRouteChildren {
-  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
   AuthenticatedAppRoute: typeof AuthenticatedAppRouteWithChildren
-  AuthenticatedTeacherRoute: typeof AuthenticatedTeacherRoute
+  AuthenticatedTeacherRoute: typeof AuthenticatedTeacherRouteWithChildren
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
-  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
+  AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
   AuthenticatedAppRoute: AuthenticatedAppRouteWithChildren,
-  AuthenticatedTeacherRoute: AuthenticatedTeacherRoute,
+  AuthenticatedTeacherRoute: AuthenticatedTeacherRouteWithChildren,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -299,7 +595,9 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  ForgotPasswordRoute: ForgotPasswordRoute,
   PendingRoute: PendingRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

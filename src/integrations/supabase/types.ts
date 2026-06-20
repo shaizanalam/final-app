@@ -681,6 +681,16 @@ export type Database = {
     }
     Functions: {
       get_question_answer: { Args: { _question_id: string }; Returns: Json }
+      grade_attempt: {
+        Args: { _attempt_id: string }
+        Returns: {
+          accuracy: number
+          correct_count: number
+          score: number
+          total: number
+          total_count: number
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

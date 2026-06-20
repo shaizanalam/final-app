@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
@@ -15,7 +15,12 @@ function TestsPage() {
   const [type, setType] = useState<string>("practice");
   const { data: tests } = useQuery({
     queryKey: ["tests"],
-    queryFn: async () => (await supabase.from("tests").select("*").not("published_at", "is", null).order("created_at", { ascending: false })).data ?? [],
+    queryFn: async () =>
+      (await supabase
+        .from("tests")
+        .select("id,title,type,duration_minutes,total_marks,published_at")
+        .not("published_at", "is", null)
+        .order("created_at", { ascending: false })).data ?? [],
   });
   const filtered = (tests ?? []).filter((t) => t.type === type);
 
@@ -38,7 +43,7 @@ function TestsPage() {
           </div>
         )}
         {filtered.map((t) => (
-          <div key={t.id} className="rounded-2xl bg-card border border-border p-4 shadow-soft flex items-center gap-3">
+          <Link key={t.id} to="/app/tests/$testId" params={{ testId: t.id }} className="rounded-2xl bg-card border border-border p-4 shadow-soft flex items-center gap-3 hover:bg-secondary/40 transition">
             <div className="size-12 rounded-2xl bg-primary/15 text-primary grid place-items-center font-extrabold">{t.total_marks || "—"}</div>
             <div className="flex-1 min-w-0">
               <p className="font-bold truncate">{t.title}</p>
@@ -47,13 +52,9 @@ function TestsPage() {
                 <span className="capitalize">{t.type}</span>
               </div>
             </div>
-            <button className="rounded-xl bg-primary text-primary-foreground p-2 shadow-soft"><ChevronRight className="size-5" /></button>
-          </div>
+            <div className="rounded-xl bg-primary text-primary-foreground p-2 shadow-soft"><ChevronRight className="size-5" /></div>
+          </Link>
         ))}
-      </div>
-
-      <div className="mt-6 rounded-2xl bg-secondary p-4 text-sm text-secondary-foreground">
-        💡 Test-taking interface (timed runs, all 4 question types, instant results + confetti) is wired to the schema and ready to be enabled once your teachers publish a test.
       </div>
     </div>
   );

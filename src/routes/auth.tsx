@@ -143,6 +143,7 @@ function AuthPage() {
                 <Button disabled={loading} type="submit" className="w-full h-12 rounded-2xl text-base font-semibold shadow-soft">
                   {loading ? <Loader2 className="size-4 animate-spin" /> : "Login"}
                 </Button>
+                <p className="text-xs text-center"><Link to="/forgot-password" className="text-primary font-semibold">Forgot password?</Link></p>
               </form>
             </TabsContent>
 

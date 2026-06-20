@@ -1,9 +1,14 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useSession } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { LogOut, Mail, Phone, BookOpen, GraduationCap } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { toast } from "sonner";
+import { LogOut, Mail, Phone, BookOpen, GraduationCap, Pencil, KeyRound } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/app/profile")({
   component: ProfilePage,
@@ -11,25 +16,40 @@ export const Route = createFileRoute("/_authenticated/app/profile")({
 
 function ProfilePage() {
   const navigate = useNavigate();
+  const qc = useQueryClient();
   const { data: session } = useSession();
+
   const { data: klass } = useQuery({
     queryKey: ["my-class", session?.studentDetails?.class_id],
-    queryFn: async () => {
-      if (!session?.studentDetails?.class_id) return null;
-      const { data } = await supabase.from("classes").select("name").eq("id", session.studentDetails.class_id).maybeSingle();
-      return data;
-    },
+    queryFn: async () =>
+      session?.studentDetails?.class_id
+        ? (await supabase.from("classes").select("name").eq("id", session.studentDetails.class_id).maybeSingle()).data
+        : null,
     enabled: !!session?.studentDetails?.class_id,
   });
   const { data: stream } = useQuery({
     queryKey: ["my-stream", session?.studentDetails?.stream_id],
-    queryFn: async () => {
-      if (!session?.studentDetails?.stream_id) return null;
-      const { data } = await supabase.from("streams").select("name").eq("id", session.studentDetails.stream_id).maybeSingle();
-      return data;
-    },
+    queryFn: async () =>
+      session?.studentDetails?.stream_id
+        ? (await supabase.from("streams").select("name").eq("id", session.studentDetails.stream_id).maybeSingle()).data
+        : null,
     enabled: !!session?.studentDetails?.stream_id,
   });
+
+  const [open, setOpen] = useState(false);
+  const [form, setForm] = useState({ name: "", mobile: "" });
+  useEffect(() => {
+    if (session?.profile) setForm({ name: session.profile.name, mobile: session.profile.mobile ?? "" });
+  }, [session]);
+
+  async function save() {
+    if (!form.name.trim()) return toast.error("Name required");
+    const { error } = await supabase.from("profiles").update({ name: form.name.trim(), mobile: form.mobile.trim() || null }).eq("id", session!.userId!);
+    if (error) return toast.error(error.message);
+    toast.success("Profile updated");
+    setOpen(false);
+    qc.invalidateQueries({ queryKey: ["session"] });
+  }
 
   async function signOut() {
     await supabase.auth.signOut();
@@ -53,7 +73,26 @@ function ProfilePage() {
         <Row icon={Phone} label="Mobile" value={session?.profile?.mobile ?? "—"} />
       </div>
 
-      <Button onClick={signOut} variant="outline" className="mt-6 w-full h-12 rounded-2xl">
+      <div className="mt-5 grid grid-cols-2 gap-2">
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogTrigger asChild>
+            <Button variant="outline" className="h-11 rounded-2xl"><Pencil className="size-4 mr-2" /> Edit profile</Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader><DialogTitle>Edit profile</DialogTitle></DialogHeader>
+            <div className="space-y-3">
+              <div><Label>Name</Label><Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="rounded-xl" /></div>
+              <div><Label>Mobile</Label><Input value={form.mobile} onChange={(e) => setForm({ ...form, mobile: e.target.value })} className="rounded-xl" /></div>
+              <Button onClick={save} className="w-full h-11 rounded-2xl">Save</Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+        <Link to="/forgot-password">
+          <Button variant="outline" className="w-full h-11 rounded-2xl"><KeyRound className="size-4 mr-2" /> Change password</Button>
+        </Link>
+      </div>
+
+      <Button onClick={signOut} variant="ghost" className="mt-3 w-full h-12 rounded-2xl text-destructive">
         <LogOut className="size-4 mr-2" /> Sign out
       </Button>
     </div>
