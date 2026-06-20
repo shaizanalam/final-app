@@ -24,7 +24,7 @@ function AdminLayout() {
     return role === "teacher" ? <Navigate to="/teacher" /> : <Navigate to="/app" />;
   }
   return (
-    <SectionShell title="CCI LearnHub" subtitle="Admin console" items={ITEMS}>
+    <SectionShell title="LearnHub" subtitle="Admin console" items={ITEMS}>
       <Outlet />
     </SectionShell>
   );

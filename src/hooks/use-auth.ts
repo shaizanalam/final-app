@@ -16,7 +16,12 @@ export interface SessionInfo {
     avatar_url: string | null;
   } | null;
   roles: AppRole[];
-  studentDetails: { class_id: string; stream_id: string | null } | null;
+  studentDetails: {
+    class_id: string;
+    stream_id: string | null;
+    class_name: string | null;
+    stream_name: string | null;
+  } | null;
 }
 
 export async function fetchSession(): Promise<SessionInfo> {
@@ -27,15 +32,28 @@ export async function fetchSession(): Promise<SessionInfo> {
   const [{ data: profile }, { data: roles }, { data: details }] = await Promise.all([
     supabase.from("profiles").select("*").eq("id", user.id).maybeSingle(),
     supabase.from("user_roles").select("role").eq("user_id", user.id),
-    supabase.from("student_details").select("class_id, stream_id").eq("profile_id", user.id).maybeSingle(),
+    supabase
+      .from("student_details")
+      .select("class_id, stream_id, classes(name), streams(name)")
+      .eq("profile_id", user.id)
+      .maybeSingle(),
   ]);
+
+  const studentDetails = details
+    ? {
+        class_id: (details as any).class_id as string,
+        stream_id: (details as any).stream_id as string | null,
+        class_name: (details as any).classes?.name ?? null,
+        stream_name: (details as any).streams?.name ?? null,
+      }
+    : null;
 
   return {
     userId: user.id,
     email: user.email ?? null,
     profile: profile as SessionInfo["profile"],
     roles: (roles ?? []).map((r) => r.role as AppRole),
-    studentDetails: (details as SessionInfo["studentDetails"]) ?? null,
+    studentDetails,
   };
 }
 

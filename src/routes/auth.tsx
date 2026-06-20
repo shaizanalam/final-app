@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { BrandLogo } from "@/components/brand";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -109,7 +110,10 @@ function AuthPage() {
   return (
     <div className="min-h-screen grid lg:grid-cols-2">
       <div className="hidden lg:flex bg-hero text-white p-12 flex-col justify-between">
-        <Link to="/" className="font-display text-2xl font-extrabold">CCI LearnHub</Link>
+        <Link to="/" className="inline-flex items-center gap-3">
+          <BrandLogo showText={false} />
+          <span className="font-display text-2xl font-extrabold">LearnHub</span>
+        </Link>
         <div>
           <h2 className="text-4xl font-extrabold leading-tight">Your class. Your stream.<br/>Your hub.</h2>
           <p className="mt-4 text-white/90 max-w-md">Materials, tests and progress — neatly organized for exactly what you're studying. No noise, no group chats.</p>
@@ -120,7 +124,7 @@ function AuthPage() {
       <div className="flex items-center justify-center p-6 sm:p-12">
         <div className="w-full max-w-md">
           <div className="lg:hidden mb-8 text-center">
-            <div className="mx-auto size-14 rounded-2xl bg-hero grid place-items-center text-white font-bold shadow-glow">CCI</div>
+            <BrandLogo showText={false} className="mx-auto" />
             <h1 className="mt-3 font-display text-2xl font-extrabold">LearnHub</h1>
           </div>
 

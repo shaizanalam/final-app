@@ -19,22 +19,8 @@ function ProfilePage() {
   const qc = useQueryClient();
   const { data: session } = useSession();
 
-  const { data: klass } = useQuery({
-    queryKey: ["my-class", session?.studentDetails?.class_id],
-    queryFn: async () =>
-      session?.studentDetails?.class_id
-        ? (await supabase.from("classes").select("name").eq("id", session.studentDetails.class_id).maybeSingle()).data
-        : null,
-    enabled: !!session?.studentDetails?.class_id,
-  });
-  const { data: stream } = useQuery({
-    queryKey: ["my-stream", session?.studentDetails?.stream_id],
-    queryFn: async () =>
-      session?.studentDetails?.stream_id
-        ? (await supabase.from("streams").select("name").eq("id", session.studentDetails.stream_id).maybeSingle()).data
-        : null,
-    enabled: !!session?.studentDetails?.stream_id,
-  });
+  const klassName = session?.studentDetails?.class_name ?? null;
+  const streamName = session?.studentDetails?.stream_name ?? null;
 
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({ name: "", mobile: "" });
@@ -67,8 +53,8 @@ function ProfilePage() {
       </div>
 
       <div className="mt-5 space-y-2">
-        <Row icon={GraduationCap} label="Class" value={klass?.name ?? "—"} />
-        {stream && <Row icon={BookOpen} label="Stream" value={stream.name} />}
+        <Row icon={GraduationCap} label="Class" value={klassName ?? "—"} />
+        {streamName && <Row icon={BookOpen} label="Stream" value={streamName} />}
         <Row icon={Mail} label="Email" value={session?.profile?.email ?? "—"} />
         <Row icon={Phone} label="Mobile" value={session?.profile?.mobile ?? "—"} />
       </div>

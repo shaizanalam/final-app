@@ -1,5 +1,6 @@
 import { createFileRoute, Link, Navigate } from "@tanstack/react-router";
 import { useSession, topRole } from "@/hooks/use-auth";
+import { BrandLogo } from "@/components/brand";
 import { BookOpen, GraduationCap, Sparkles, Trophy } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -30,10 +31,7 @@ function Landing() {
   return (
     <div className="min-h-screen bg-background">
       <header className="px-5 py-4 flex items-center justify-between max-w-6xl mx-auto">
-        <div className="flex items-center gap-2">
-          <div className="size-10 rounded-2xl bg-hero shadow-glow grid place-items-center text-white font-bold">CCI</div>
-          <span className="font-display text-xl font-bold">LearnHub</span>
-        </div>
+        <BrandLogo className="gap-3" />
         <Link to="/auth" className="rounded-2xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-soft hover:opacity-90 transition">
           Sign in
         </Link>
