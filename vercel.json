@@ -2,14 +2,22 @@
   "version": 3,
   "builds": [
     {
-      "src": "src/server.ts",
+      "src": "api/index.js",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
-      "src": "/(.*)",
-      "dest": "/src/server.ts"
+      "src": "/assets/(.*)",
+      "dest": "/dist/client/assets/$1"
+    },
+    {
+      "src": "/logo.png",
+      "dest": "/dist/client/logo.png"
+    },
+    {
+      "src": "^/(.*)$",
+      "dest": "/api/index.js"
     }
   ],
   "outputDirectory": "dist/client"
