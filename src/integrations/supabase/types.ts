@@ -680,6 +680,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_question_answer: { Args: { _question_id: string }; Returns: Json }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
