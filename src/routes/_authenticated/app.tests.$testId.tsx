@@ -202,7 +202,7 @@ function TestRunner() {
               ))}
             </RadioGroup>
           )}
-          {q.type === "multi" && ((q.options as string[] | null) ?? []).map((o, i) => {
+          {q.type === "multi_correct" && ((q.options as string[] | null) ?? []).map((o, i) => {
             const picked = (answer as { values?: number[] } | undefined)?.values ?? [];
             return (
               <label key={i} className="flex items-center gap-3 rounded-2xl border border-border p-3 cursor-pointer hover:bg-secondary/40">

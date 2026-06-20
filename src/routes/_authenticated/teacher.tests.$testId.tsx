@@ -16,7 +16,7 @@ export const Route = createFileRoute("/_authenticated/teacher/tests/$testId")({
   component: TestEditor,
 });
 
-const QTYPES = ["mcq", "multi", "numerical", "true_false"] as const;
+const QTYPES = ["mcq", "multi_correct", "numerical", "true_false"] as const;
 type QType = typeof QTYPES[number];
 
 function TestEditor() {
@@ -69,7 +69,7 @@ function TestEditor() {
     if (draft.type === "mcq") {
       if (draft.correct.length !== 1) return toast.error("Pick exactly one correct option");
       payload = { ...payload, options: draft.options, correct_answer: { value: Number(draft.correct[0]) } };
-    } else if (draft.type === "multi") {
+    } else if (draft.type === "multi_correct") {
       if (draft.correct.length === 0) return toast.error("Pick at least one correct option");
       payload = { ...payload, options: draft.options, correct_answer: { values: draft.correct.map(Number).sort((a, b) => a - b) } };
     } else if (draft.type === "numerical") {
@@ -166,11 +166,11 @@ function TestEditor() {
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <Label>Type</Label>
-                <Select value={draft.type} onValueChange={(v) => setDraft({ ...draft, type: v as QType, correct: [], options: v === "mcq" || v === "multi" ? ["", "", "", ""] : [] })}>
+                <Select value={draft.type} onValueChange={(v) => setDraft({ ...draft, type: v as QType, correct: [], options: v === "mcq" || v === "multi_correct" ? ["", "", "", ""] : [] })}>
                   <SelectTrigger className="rounded-xl"><SelectValue /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="mcq">Single MCQ</SelectItem>
-                    <SelectItem value="multi">Multi-correct</SelectItem>
+                    <SelectItem value="multi_correct">Multi-correct</SelectItem>
                     <SelectItem value="numerical">Numerical</SelectItem>
                     <SelectItem value="true_false">True / False</SelectItem>
                   </SelectContent>
@@ -186,7 +186,7 @@ function TestEditor() {
               <Textarea value={draft.question_text} onChange={(e) => setDraft({ ...draft, question_text: e.target.value })} className="rounded-xl" rows={3} maxLength={2000} />
             </div>
 
-            {(draft.type === "mcq" || draft.type === "multi") && (
+            {(draft.type === "mcq" || draft.type === "multi_correct") && (
               <div className="space-y-2">
                 <Label>Options & correct answer</Label>
                 {draft.options.map((o, i) => (
